@@ -24,8 +24,9 @@ SECRET_KEY = 'django-insecure-1_=zp_2#+u(q)91f8pr($-d3*_%5@%+woerot-k8xy#1f)=ydv
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = ['https://flexigo.herokuapp.com/']
+ALLOWED_HOSTS = ['https://flexigo.herokuapp.com', 'localhost']
 
 
 # Application definition
