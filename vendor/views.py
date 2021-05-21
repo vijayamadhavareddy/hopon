@@ -132,14 +132,17 @@ def chngpwd(request):
                 errors.append("Please confirm password correctly.")
             if not errors:
                 try:
-                    a = authenticate(request, username=request.user, password=request.POST["password"])
+                    a = authenticate(request, username=request.user, password=request.POST["old_password"])
                     if a:
                         user = User.objects.get(username=request.user)
                         user.set_password(request.POST["password"])
                         user.save()
                         auth_logout(request)
+                    else:
+                        errors.append("Please enter correct password")
                 except Exception as e:
-                    errors.append("Please enter correct password")
+                    errors.append("Error in changing Password")
+                    
                 if errors:
                     return render(request, "chngpwd.html", {"errors": errors})
                 else:
