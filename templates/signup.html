@@ -125,11 +125,11 @@
         <div class="enterOtp">
             <div class="done_text"> 
                 <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
-                <h6>Six digit OTP is sent to your email. <br>Please enter it here.</h6> 
+                <h6 id="otpinfo"></h6> 
             </div>  
-            <div class="form-group col errormsg" id="otpError" > 
+            <div class="form-group col errormsg" id="otpError">
                 <span><i class="fa fa-exclamation-triangle"></i> Please enter correct otp.</span>
-            </div> 
+            </div>
             <div class="code_group">
                 <input type="text" class="form-control inputs" id="otp1" placeholder="-" maxlength="1">
                 <input type="text" class="form-control inputs" id="otp2" placeholder="-" maxlength="1">
@@ -172,21 +172,29 @@
             if($(".detailsForm").css("display")!="none"){
                 if($('#result').addClass('text-success').text()=="Strong" && $("#password").val()===$("#confirm_password").val()){
                     $("#passwordError").hide();
-                    $.ajax({
-                        type: "GET",
-                        url: "/vendor/send_email/?email="+$("#email").val(),
-                        success: function(status){
-                            if (status == "failed"){
-                                $("#emailError").show();
-                            }else{
-                                $("#emailError").hide();
-                                $(".detailsForm").hide();
-                                $(".enterOtp").show();
-                                $('#sendOtpBtn').removeClass('sendOtp');
-                                $('#sendOtpBtn').text('Verify');
-                            }
-                        },
-                    })
+                    if($('#email').val()==$("#confirm_email").val()){
+                        $("#emailError").hide();
+                        $.ajax({
+                            type: "GET",
+                            url: "/vendor/send_email/?email="+$("#email").val(),
+                            success: function(status){
+                                if (status == "failed"){
+                                    $("#emailError").show();
+                                    $("#emailError").html("Email already taken");
+                                }else{
+                                    $("#emailError").hide();
+                                    $(".detailsForm").hide();
+                                    $(".enterOtp").show();
+                                    $("#otpinfo").html("Six digit OTP is sent to your email "+$('#email').val()+". <br>Please enter it here.")
+                                    $('#sendOtpBtn').removeClass('sendOtp');
+                                    $('#sendOtpBtn').text('Verify');
+                                }
+                            },
+                        })
+                    }else{
+                        $("#emailError").show();
+                        $("#emailError").html("Emails doesn't match");
+                    }
                 }else{
                     $("#passwordError").show();
                 }
@@ -311,15 +319,15 @@
                 $('#result').removeClass()
                 $('#password-strength').addClass('progress-bar-danger');
     
-                $('#result').addClass('text-danger').text('Very Week');
+                $('#result').addClass('text-danger').text('Very Weak');
                 $('#password-strength').css('width', '10%');
             } else if (strength == 2) {
                 $('#result').addClass('good');
                 $('#password-strength').removeClass('progress-bar-danger');
                 $('#password-strength').addClass('progress-bar-warning');
-                $('#result').addClass('text-warning').text('Week')
+                $('#result').addClass('text-warning').text('Weak')
                 $('#password-strength').css('width', '60%');
-                return 'Week'
+                return 'Weak'
             } else if (strength == 4) {
                 $('#result').removeClass()
                 $('#result').addClass('strong');

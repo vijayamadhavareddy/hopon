@@ -25,7 +25,7 @@ def home(request):
 
 def check_username(request):
     try:
-        username = request.GET.get("username")
+        username = request.GET.get("username").lower()
         user = User.objects.get(username=username)
         return HttpResponse("False")
     except:
@@ -67,7 +67,7 @@ def login(request):
     if request.user.is_authenticated:
         return redirect("home")
     if request.method == "POST":
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         user = authenticate(request, username=username, password=password)
@@ -86,10 +86,14 @@ def logout(request):
 def signup(request):
     if request.method == "POST":
         try:
-            userform = User(username=request.POST["username"], first_name=request.POST["firstname"], last_name=request.POST["lastname"],
-                        password=make_password(request.POST['password']), email=request.POST["email"])
+            username = request.POST["username"].lower()
+            password = request.POST['password']
+            userform = User(username=username, first_name=request.POST["firstname"], last_name=request.POST["lastname"],
+                        password=make_password(password), email=request.POST["email"])
             userform.save()
-            return HttpResponse("success")
+            u = authenticate(request, username=username, password=password)
+            auth_login(request, u)
+            return redirect("verifyaccount")
         except Exception as e:
             return HttpResponse("failed")
 
@@ -100,6 +104,7 @@ def signup(request):
 
 
 def forgot(request):
+    error = ""
     if request.method == "POST":
         try:
             email = request.POST["email"]
@@ -113,9 +118,9 @@ def forgot(request):
 
             return redirect("login")
         except:
-            pass
+            error = "No account found for this email"
 
-    return render(request, "forgot.html")
+    return render(request, "forgot.html", {"error": error})
 
 def id_generator(size=8, chars=string.ascii_lowercase):
     return ''.join(random.choice(chars) for _ in range(size))
