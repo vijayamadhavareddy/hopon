@@ -13,5 +13,5 @@ urlpatterns = [
     path('chngpwd/', views.chngpwd, name="chngpwd"),
     path('logout/', views.logout, name="logout"),
     path('verifyaccount/', views.verifyaccount, name="verifyaccount"),
-    path('verifysite/', views.verifysite, name="verifyaccount"),
+    path('verifysite/', views.verifysite, name="verifysite"),
 ]

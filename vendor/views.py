@@ -222,6 +222,9 @@ def verifysite(request):
             site = company.objects.get(vendor=ven)
             return render(request, "verifysite.html", {"company": site})
         except:
-            return render(request, "verifysite.html")
+            if ven.status == "2":
+                return render(request, "verifysite.html")
+            else:
+                return redirect("verifyaccount")
     except:
         return redirect("verifyaccount")
