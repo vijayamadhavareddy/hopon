@@ -1,0 +1,18 @@
+.enterOtp{
+    display: none;
+}
+
+.errormsg{
+    color: red; 
+    display:none; 
+    align-items:center; 
+    font-style:italic;
+}
+
+button{
+    cursor: pointer;
+}
+
+.fa-file-text {
+    color: #007bff;
+  }

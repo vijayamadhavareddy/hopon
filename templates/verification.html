@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+{% block title %}Vendor-Registration{% endblock %}
+
+{% block main-content %}
+
+{% load static %}
+<link href="{% static 'css/base.css' %}" rel="stylesheet">
+<link href="{% static 'css/passcheck.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" href="https://btn.ninja/css/addons.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+
+<style>
+    {% if vendor.status == "1" %}
+    .multi_step_form #msform #progressbar li.active:before, .multi_step_form #msform #progressbar li.active:after{
+      background: rgb(252, 236, 16);
+    }
+    .multi_step_form #msform #progressbar li.active{
+      color: rgb(252, 236, 16);
+    }
+    {% elif vendor.status == "2" %}
+    .multi_step_form #msform #progressbar li.active:before, .multi_step_form #msform #progressbar li.active:after{
+      background: rgb(22, 150, 28);
+    }
+    .multi_step_form #msform #progressbar li.active{
+      color: rgb(22, 150, 28);
+    }
+    {% elif vendor.status == "3" %}
+    .multi_step_form #msform #progressbar li.active:before, .multi_step_form #msform #progressbar li.active:after{
+      background: rgb(216, 37, 14);
+    }
+    .multi_step_form #msform #progressbar li.active{
+      color: rgb(216, 37, 14);
+    }
+    {% endif %}
+
+  
+</style>
+<section class="multi_step_form">  
+  <form id="msform" method="POST" action="/vendor/verifyaccount/" enctype="multipart/form-data"> 
+    {% csrf_token %}
+    <!-- Tittle -->
+    <div class="tittle">
+      <h2 class="signincolor">Account Verification Process</h2>
+      <p>In order to use this service, you have to complete this verification process</p>
+    </div>
+
+    <!-- progressbar -->
+    <ul id="progressbar">
+      <li class="active">Personal Details</li>  
+      <li {% if vendor.status %}class="active"{% endif %}>Upload Documents</li> 
+      <li {% if vendor.status %}class="active"{% endif %}>Approval</li>
+    </ul>
+
+    <!-- fieldsets -->
+  {% if not vendor.status %}
+
+    <fieldset class="field1">
+          <div class="form-row"> 
+              <div class="form-group col-md-6">  
+                  <input type="tel" id="phone" name="phone" class="form-control" placeholder="Phone Number" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required> 
+              </div>
+              <div class="form-group col-md-6">  
+                <input type="text" id="dob" class="form-control hasDatepicker" name="dob" placeholder="DOB: DD/MM/YYYY" maxlength="12" autocomplete="off">
+              </div>
+              <div class="form-group col-md-6 errormsg" id="phoneError">  
+                  <span ><i class="fa fa-exclamation-triangle"></i> Enter valid phone number</span>
+              </div>
+              <div class="form-group col-md-6 errormsg" id="dobError">  
+                <span ><i class="fa fa-exclamation-triangle"></i> Enter valid DOB</span>
+              </div>
+          </div>
+  
+          <div class="form-row"> 
+            <div class="form-group col-md-6">  
+              <input type="text" id="aadhar" name="aadhar" class="form-control" placeholder="Aadhar Number" maxlength="12" pattern="[0-9]{12}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required> 
+            </div>
+            <div class="form-group col-md-6">  
+              <input type="text" id="confirm_aadhar" name="confirm_aadhar" class="form-control" placeholder="Confirm Aadhar Number" maxlength="12" pattern="[0-9]{12}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required> 
+            </div>
+            <div class="form-group col-md-6 errormsg" id="aadharError">  
+              <span ><i class="fa fa-exclamation-triangle"></i> Enter valid Aadhar number</span>
+            </div>
+          </div> 
+  
+          <div class="form-row"> 
+              <div class="form-group col-md-6">  
+                <input type="text" id="address" name="address" class="form-control" placeholder="Address" maxlength="99" required> 
+              </div>  
+              <div class="form-group col-md-6">
+                <input type="text" id="city" name="city" class="form-control" placeholder="City" maxlength="55" required> 
+              </div> 
+              <div class="form-group col-md-6 errormsg" id="addressError">  
+                <span ><i class="fa fa-exclamation-triangle"></i> Enter valid Address</span>
+              </div>
+              <div class="form-group col-md-6 errormsg" id="cityError">  
+                <span ><i class="fa fa-exclamation-triangle"></i> Enter valid City</span>
+              </div>
+          </div>
+          <div class="form-row"> 
+            <div class="form-group col-md-6">  
+              <input type="text" id="state" name="state" class="form-control" placeholder="State" maxlength="55" required>
+            </div>  
+            <div class="form-group col-md-6">
+              <input type="text" id="pincode" name="pincode" class="form-control" placeholder="Pincode" maxlength="6" pattern="[0-9]{6}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required> 
+            </div>
+            <div class="form-group col-md-6 errormsg" id="stateError">  
+              <span ><i class="fa fa-exclamation-triangle"></i> Enter valid State</span>
+            </div>
+            <div class="form-group col-md-6 errormsg" id="pincodeError">  
+              <span ><i class="fa fa-exclamation-triangle"></i> Enter valid Pincode</span>
+            </div>
+          </div>
+
+      <button type="button" id="sendOtpBtn" class="action-button next">Next</button>  
+    </fieldset>
+
+
+    <fieldset class="field2">
+      <h3>Verify Your Identity</h3>
+      <h6>Please upload any of these documents to verify your Identity.</h6>
+      <div class="passport">
+        <h4 style="font-weight: bold;">Aadhar Card (Front & Back)</h4> 
+      </div>
+      <div class="input-group"> 
+        <div class="custom-file">
+          <input type="file" class="custom-file-input aadharPicfront" name="aadhar_frontimg" id="aadhar_frontimg" accept='.jpeg, .jpg, .png, .gif, .tiff, .bmp'>
+          <label class="custom-file-label" for="aadhar_frontimg" id="aadhar_frontimg_label"><i class="far fa-image"></i>Aadhar front side</label>
+        </div>
+      </div>
+      <div class="input-group"> 
+        <div class="custom-file">
+          <input type="file" class="custom-file-input aadharPicback" name="aadhar_backimg" id="aadhar_backimg" accept='.jpeg, .jpg, .png, .gif, .tiff, .bmp'>
+          <label class="custom-file-label" for="aadhar_backimg" id="aadhar_backimg_label"><i class="far fa-image"></i>Aadhar back side</label>
+        </div>
+      </div>
+      <!-- <ul class="file_added">
+        <li>Files Added:</li>
+        <li><a href="#"><i class="ion-paperclip"></i>national_id_card.png</a></li>
+      </ul> -->
+
+      <button type="button" class="action-button previous previous_button">Back</button>
+      <button type="submit" class="next action-button">Submit</button>  
+    </fieldset>  
+{% endif %}
+
+    <fieldset class="field3">
+      <div class="done_text"> 
+        {% if vendor.status == "1" or not vendor %}
+          <a href="#"><i style="color: rgb(252, 236, 16); " class="fas fa-check-circle fa-fx fa-6x"></i></a>
+          <h6 style="font-weight: bold;margin-top: 30px">Thanks for enrolling as a vendor with HOPON. <br>You account for "{{vendor.user|title}}"" is under review. <br>We will notify you through Email once we make our decision</h6> 
+        {% elif vendor.status == "2" %}
+          <a href="#"><i style="color: rgb(22, 150, 28); " class="fas fa-check-circle fa-fx fa-6x"></i></a>
+          <h6 style="font-weight: bold;margin-top: 30px">Congratulation !!!!! <br>You account for "{{vendor.user|title}}"" is now approved. <br>Please register your company/site to rent your cars.</h6> 
+          <button type="button" class="btn btn-success" onclick="window.location.href='/vendor/verifysite/'">Register Site</button>
+        {% elif vendor.status == "3" %}
+          <a href="#"><i style="color: rgb(216, 37, 14); " class="fas fa-times-circle fa-fx fa-6x"></i></a>
+          <h6 style="font-weight: bold;margin-top: 30px">We are sorry to report you <br>You account for "{{vendor.user|title}}"" is rejected. <br>Please contact "+91-999998888" or Email "support@hopon.com" for more information.</h6> 
+        {% endif %}
+
+      </div>  
+    </fieldset>  
+  </form> 
+
+</section> 
+
+<script>
+  (function($) {
+      "use strict";  
+      
+      //* Form js
+      $('.aadharPicfront').change(function() {
+        var i = $(this).prev('label').clone();
+        var file = $('#aadhar_frontimg')[0].files[0].name;
+        $("#aadhar_frontimg_label").text(file);
+      });
+
+      $('.aadharPicback').change(function() {
+        var i = $(this).prev('label').clone();
+        var file = $('#aadhar_backimg')[0].files[0].name;
+        $("#aadhar_backimg_label").text(file);
+      });
+
+      function checkform1(){
+        var errors = 0;
+
+        if($("#phone").val().length < 10){
+          $("#phoneError").show();
+          errors += 1;
+        }else{
+          $("#phoneError").hide();
+        }
+
+        if($("#dob").val().length < 10){
+          $("#dobError").show();
+          errors += 1;
+        }else{
+          $("#dobError").hide();
+        }
+
+        if($("#aadhar").val().length < 12 || $("#aadhar").val() != $("#confirm_aadhar").val()){
+          errors += 1;
+          $("#aadharError").show();
+        }else{
+          $("#aadharError").hide();
+        }
+
+        if($("#address").val().length < 1){
+          errors += 1;
+          $("#addressError").show();
+        }else{
+          $("#addressError").hide();
+        }
+        if($("#city").val().length < 1){
+          errors += 1;
+          $("#cityError").show();
+        }else{
+          $("#cityError").hide();
+        }
+
+        if($("#state").val().length < 1){
+          errors += 1;
+          $("#stateError").show();
+        }else{
+          $("#stateError").hide();
+        }
+        if($("#pincode").val().length < 6){
+          errors += 1;
+          $("#pincodeError").show();
+        }else{
+          $("#pincodeError").hide();
+        }
+
+        return errors;
+
+      }
+
+      function verificationForm(){
+          //jQuery time
+          var current_fs, next_fs, previous_fs; //fieldsets
+          var left, opacity, scale; //fieldset properties which we will animate
+          var animating; //flag to prevent quick multi-click glitches
+  
+          $(".next").click(function () {
+              var err = checkform1();
+                if(err>0){
+                  return false;
+                }
+              if (animating) return false;
+              animating = true;
+  
+              current_fs = $(this).parent();
+              
+              next_fs = $(this).parent().next();
+  
+              //activate next step on progressbar using the index of next_fs
+              $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+  
+              //show the next fieldset
+              next_fs.show();
+              //hide the current fieldset with style
+              current_fs.animate({
+                  opacity: 0
+              }, {
+                  step: function (now, mx) {
+                      //as the opacity of current_fs reduces to 0 - stored in "now"
+                      //1. scale current_fs down to 80%
+                      scale = 1 - (1 - now) * 0.2;
+                      //2. bring next_fs from the right(50%)
+                      left = (now * 50) + "%";
+                      //3. increase opacity of next_fs to 1 as it moves in
+                      opacity = 1 - now;
+                      current_fs.css({
+                          'transform': 'scale(' + scale + ')',
+                          'position': 'absolute'
+                      });
+                      next_fs.css({
+                          'left': left,
+                          'opacity': opacity
+                      });
+                  },
+                  duration: 800,
+                  complete: function () {
+                      animating = false;
+                  },
+                  //this comes from the custom easing plugin
+                  easing: 'easeInOutBack'
+              });
+          });
+
+          $(".previous").click(function () {
+            if (animating) return false;
+            animating = true;
+    
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+    
+            //de-activate current step on progressbar
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+    
+            //show the previous fieldset
+            previous_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({
+                opacity: 0
+            }, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale previous_fs from 80% to 100%
+                    scale = 0.8 + (1 - now) * 0.2;
+                    //2. take current_fs to the right(50%) - from 0%
+                    left = ((1 - now) * 50) + "%";
+                    //3. increase opacity of previous_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'left': left
+                    });
+                    previous_fs.css({
+                        'transform': 'scale(' + scale + ')',
+                        'opacity': opacity
+                    });
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+          });
+  
+          $(".submit").click(function () {
+              return false;
+          })
+      }; 
+      
+      //* Select js
+      function nice_Select(){
+          if ( $('.product_select').length ){ 
+              $('select').niceSelect();
+          };
+      }; 
+
+      var dateformat = 'dd/mm/yyyy';
+      $('.hasDatepicker').datepicker({
+        format: dateformat,
+        autoclose: true
+      });
+
+      $('select').on('change', function() {
+        dateformat = $(this).val();
+        $('.hasDatepicker').each(updateDateFormat);
+      });
+      /*Function Calls*/  
+      verificationForm ();
+      nice_Select ();
+  })(jQuery); 
+
+</script>
+  
+{% endblock %}

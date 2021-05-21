@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+<script>
+    $(document).ready(function() {
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+                $('#imagePreview').hide();
+                $('#imagePreview').fadeIn(650);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").change(function() {
+        readURL(this);
+    });
+});
+</script>
+
+{% block title %}
+    {{vendor.user.first_name|title}}
+{% endblock %}
+
+{% block main-content %}
+<style>
+    .sidebar{
+        border:1px solid black; 
+        border-radius:20px;
+    }
+    .card-header{
+        cursor: pointer;
+    }
+    .fas{
+        font-size: x-large;
+    }
+    #upcomingHeader{
+        background-color: #69ebec;
+    }
+    #sessionHeader{
+        background-color: aquamarine;
+    }
+    #speakerHeader{
+        background-color: #d1ffd1;
+    }
+    @media screen and (max-width: 520px){
+        .sidebar{
+            width: 100%;
+        }
+        .col-3{
+            max-width: 100%;
+        }
+    }
+</style>
+
+<div class="con row" style="background-color: white;height:100%; width:100%;margin:0; padding:1%;">
+    <div class="sidebar col-3">
+        <h4 style="color: rgb(29, 140, 192);" class="text-center mt-3">{{project.name}}</h4>
+
+        <div class="avatar-preview mb-3" style="width: 100%;">
+            {% if logos %}
+            {% with logos|first as logo %}
+                <div id="imagePreview" style="background-image: url(/media/{{logo.image}});" style="max-width: 100%; max-height:180px;">
+            {% endwith %}
+            {% else %}
+            <div id="imagePreview" style="background-image: url(/images/upload-image.jpeg);" style="max-width: 100%; max-height:180px;">
+            {% endif %}
+            </div>
+        </div>
+
+        <div class="container">
+            <p style="font-style: italic; text-align:justify">{{project.description}}</p>
+            <p>Time Zone: {{project.timezone}}</p>
+
+            <b>URL:</b><a href="{{webhost}}vote/event/{{vote_ident}}/">www.{{project.url_prefix}}.engagenow.live</a><br><br>
+
+            {% if project.require_registration %}
+                <span class="badge badge-info">Attendee requires registration to vote this event</span>
+            {% endif %}
+        </div>
+        
+        
+        <button class="btn mt-4" style="width: 100%; text-align:center; border-radius:10px; padding:5px; font-family:'Rubik';" onclick="$('#eventModal').modal('show')">Edit Event</button>
+    </div>  
+    <div class="col-9">
+        <div id="accordionSessions">
+            <div class="card mb-4" style="overflow-x: scroll; width:100%;padding:0 ;border:1px solid rgb(58, 160, 207)">
+                <div class="card-header text-center" id="sessionHeader" data-toggle="collapse" data-target="#collapseSessions" aria-expanded="true" aria-controls="collapseSessions">
+                    <i class="fas fa-business-time float-left"></i>
+                    Sessions ({{schedules.count|default:0}})
+                    <span style="float:right; cursor:pointer" onclick="$('#createSessionModal').modal('show')"><i class="fas fa-plus" style="font-size: medium;"></i> Add Session</span>
+                </div>
+                <div id="collapseSessions" class="collapse show" aria-labelledby="headingSessions" data-parent="#accordionSessions">
+                    <div class="card-body" style="overflow-x: scroll;width:100%; display:flex; padding:.25rem;">
+                        {% for s in schedules %}
+                            <div class="card mr-2" style="min-width: 250px;max-height:250px;">
+                                <div class="card-body px-1">
+                                    <h5 class="card-title text-center" style="color: rgb(29, 140, 192);">{{s.name}}</h5>
+                                    <!-- <p class="card-text" style="overflow: hidden;height:75px;
+                                    text-overflow: ellipsis;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical; font-style:italic;margin-bottom::0">{{s.description}}.</p> -->
+                                    <p class="card-text m-0" style="font-weight: 500;font-family:'Font Awesome 5 Free'">{{s.start_datetime}}</p>
+                                    {% if s.duration %}
+                                        <p class="card-text mb-1" style="font-weight: 500; font-family:'Font Awesome 5 Free'">Duration: {{s.duration|floatformat:2}} <small>hrs</small></p>
+                                    {% endif %}
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="card-link">Launch</a>
+                                        <a href="#" class="card-link">Open</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="card" style="cursor: pointer; min-width:250px" onclick="$('#createSessionModal').modal('show')">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center" style="background-color:rgb(169, 194, 194)">
+                                <i class="fas fa-plus"></i>
+                                <h5>Add session</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="accordionSpeakers">
+            <div class="card" style="overflow-x: scroll; width:100%;padding:0 ;border:1px solid rgb(58, 160, 207)">
+                <div class="card-header text-center" id="speakerHeader" data-toggle="collapse" data-target="#collapseSpeakers" aria-expanded="true" aria-controls="collapseSpeakers">
+                    <i class="fas fa-user-alt float-left"></i>
+                    {% if schedules %}
+                    Speakers ({{speakers|length|default:0}})
+                    <span style="float:right; cursor:pointer" onclick="$('#createSpeakerModal').modal('show')"><i class="fas fa-plus" style="font-size: medium;"></i> Add Speaker</span>
+                    {% else %}
+                    Please add atleast a session to add speakers
+                    {% endif %}
+                </div>
+                {% if schedules %}
+                    <div id="collapseSpeakers" class="collapse show" aria-labelledby="headingSpeakers" data-parent="#accordionSpeakers">
+                        <div class="card-body" style="overflow-x: scroll;width:100%; display:flex; padding:.25rem">
+                            {% for s in speakers %}
+                                <div class="card mr-2" style="min-width: 250px;">
+                                    <div class="card-body px-1">
+                                        <h5 class="card-title text-center" style="color: rgb(29, 140, 192);">{{s.name}}</h5>
+                                        <p class="card-text mb-1" >Session: <span style="color: rgb(29, 140, 192);">{{s.schedule.name}}</span></p>
+                                        <p class="card-text" >{{s.scoring_module}}</p>
+                                        <!-- <p class="card-text" style="overflow: hidden;height:75px;
+                                        text-overflow: ellipsis;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 3;
+                                        -webkit-box-orient: vertical; font-style:italic;margin-bottom::0">{{s.description}}.</p> -->
+                                        <!-- <p class="card-text m-0" style="font-weight: 500;font-family:'Font Awesome 5 Free'">{{s.start_datetime}}</p> -->
+                                        {% if s.duration %}
+                                            <p class="card-text mb-1" style="font-weight: 500; font-family:'Font Awesome 5 Free'">Duration: {{s.duration|floatformat:2}} <small>hrs</small></p>
+                                        {% endif %}
+                                        <div class="d-flex justify-content-center">
+                                            <a href="#" class="card-link">Launch</a>
+                                            <a href="#" class="card-link">Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="card" style="cursor: pointer; min-width:250px" onclick="$('#createSpeakerModal').modal('show')">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center" style="background-color:rgb(169, 194, 194)">
+                                    <i class="fas fa-plus" ></i>
+                                    <h5>Add Speaker</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                {% endif %}     
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

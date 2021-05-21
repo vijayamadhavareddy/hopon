@@ -1,0 +1,258 @@
+body{
+    background: url('https://i.pinimg.com/originals/48/79/86/487986c17560a8ed1afdc55e480e5be2.png');background-size:cover;background-repeat:no-repeat;
+}
+nav{
+    border-bottom: 2px solid white;
+    width: -webkit-fill-available;
+}
+
+button{
+    cursor: pointer;
+}
+
+.nav-item{
+    margin-right: 20px;
+}
+.navbar-list{
+    color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+    font-family: 'Rubik';
+}
+
+.mt-6 {
+    margin-top: 4rem;
+}
+
+.flexrow, .flexrowbtn{
+    display: flex; 
+    flex-direction: row;
+    justify-content: center; 
+    align-items:center; 
+    flex-wrap: wrap; 
+    gap: 10px;
+}
+
+.createbutton{
+    gap: 6%;
+    margin-top: 3%;
+}
+
+.btn-info{
+    border-radius: 30px;
+}
+
+/* .navbar-list{
+    color: white;
+    font-family: "Rubik";
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: none;
+} */
+
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: white;
+    font-weight: 1000;
+    color: aqua;
+    /* background: #1c7ebe; */
+    border-radius: 10px;
+}
+
+.signupcolor, .signincolor{
+    background: linear-gradient(295deg,#086fe4 0%,#1de4c2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.formcon{
+    border-radius: 10px; 
+    margin-left:30%;
+    margin-top: 30px;
+    background-color: white;
+    width: 40%;
+    box-shadow:
+        0 0 10px 3px rgb(58, 122, 122),  /* inner white */
+        0 0 10px 5px rgb(62, 133, 143);
+}
+
+.navbar-brand{
+    width: fit-content;
+}
+
+.bgimage{
+    background-size: initial;
+	text-align: center;
+}
+
+.white{
+    color: white;
+}
+
+label{
+    font-size:large; 
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.dropdown:hover>.dropdown-menu {
+    display: block;
+} 
+
+/* .navbar{
+    padding: 1%;
+} */
+
+.errorlist {
+    font-weight: bold;
+    color: red;
+    list-style: none;
+    padding-left: 0;
+    text-align: center;
+}
+
+#errorblock {
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
+
+.arcivescon{
+    background-color: aliceblue;
+    border-radius: 20px;
+    padding-bottom: 3%;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.searchcon{
+    width: 50%;
+}
+
+.card{
+    position:relative; 
+    border: 2px solid rgb(80, 142, 179); 
+    border-radius: 10px; display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    padding:1%;
+    width: 260px;
+}
+
+.buttoncon{
+    background-color: aliceblue;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.errorhide {
+    color:red;
+    font-weight: bold;
+    display: none;
+    text-align: center;
+}
+.noDisplay {
+    display: none;
+}
+
+.btn-primary{
+    background-color: #08488c;
+    border-color: #08488c;
+}
+
+.navbar-brand{
+    height: 70px; 
+    width:80px; 
+    border-radius:50%
+}
+
+
+@media only screen and (max-width: 500px) {
+    html{
+        height: 100%;
+    }
+
+    .formcon{
+        width: 96%;
+        /* margin: 10px; */
+        margin-left: 2%;
+        padding: 0;
+    }
+
+    .form{
+        margin: 0;
+        padding: 10px;
+    }
+
+    .navbar-brand{
+        width: 60%;
+    }
+
+    .navbar{
+        display: inline-block;
+    }
+
+    .navbar-toggler{
+        color: rgba(0,0,0,.5);
+        border-color: rgba(0,0,0,.1);
+        float: right;
+    }
+
+    .card{
+        width: 300px;
+    }
+    .navbar-brand{
+        height: 50px; 
+        width:50px; 
+    }
+
+    .formcon{
+        margin-top: 10px;
+    }
+
+    .signincolor, .signupcolor{
+        font-size: 1.5rem;
+    }
+
+    label{
+        font-size: small;
+    }
+
+    
+
+    /* .navbar-toggler .navbar-toggler-icon {
+        display: inline-block;
+        text-align: center;
+        font-weight: bold;
+        margin-right: 40%;
+        margin-top: 10%;
+        
+    } */
+}
+
+@media only screen and (max-width: 992px) {
+    .navbar{
+        background-size: auto;
+    }
+
+
+}
+
+@media only screen and (max-width: 640px) {
+    .flexrowbtn{
+        flex-direction: column;
+        width: 70%;
+    }
+
+    .createbutton{
+        gap: 10px;
+        margin-left: 15%;
+    }
+
+    .btn-info{
+        width: 100%;
+    }
+
+}   

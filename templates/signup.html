@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block main-content %}
+{{GA|safe}}
+{% load static %}
+
+
+
+<link href="{% static 'css/base.css' %}" rel="stylesheet">
+<link href="{% static 'css/passcheck.css' %}" rel="stylesheet">
+
+<style>
+    ul{
+        padding-left: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .multi_step_form #msform #progressbar li{
+        width: 100%;
+    }
+    .multi_step_form #msform {
+        padding-top: 20px;
+    }
+    .multi_step_form{
+        border-radius: 10px; 
+        margin-top: 30px;
+        margin-bottom: 50px;
+        background-color: white;
+        margin-left: 20%;
+        width: 60%;
+        box-shadow:
+            0 0 10px 3px rgb(58, 122, 122),  /* inner white */
+            0 0 10px 5px rgb(62, 133, 143);
+    }
+
+    .signincolor{
+        font-size: 2.5rem;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .multi_step_form{
+            margin-left: 2%;
+            width: 96%;
+        }
+    }
+</style>
+
+<section class="multi_step_form">  
+    <form id="msform" method="POST" action="/vendor/signup/"> 
+        {% csrf_token %}
+      <!-- Tittle -->
+      <div class="tittle signincolor">
+        <h2>Create an Account</h2>
+      </div>
+
+      <!-- progressbar -->
+      <ul id="progressbar">
+        <li class="active">Create Account</li>  
+      </ul>
+
+      <!-- fieldsets -->
+
+      <fieldset>
+          <div class="detailsForm">
+            <div class="form-row"> 
+                <div class="form-group col-md-6">  
+                    <input type="username" id="username" name="username" class="form-control" placeholder="Username" required> 
+                </div>
+                <div class="form-group col-md-6 errormsg" id="usernameError">  
+                    <span ><i class="fa fa-exclamation-triangle"></i> Username already taken</span>
+                </div>
+            </div>
+    
+            <div class="form-row"> 
+                <div class="form-group col-md-6">  
+                  <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Firstname" required> 
+                </div>  
+                <div class="form-group col-md-6"> 
+                  <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Lastname" required>
+                </div> 
+            </div> 
+    
+            <div class="form-row"> 
+                <div class="form-group col-md-6">  
+                  <input type="email" id="email" name="email" class="form-control" placeholder="Email" required> 
+                </div>  
+                <div class="form-group col-md-6"> 
+                  <input type="email" id="confirm_email" class="form-control" placeholder="Confirm Email" required>
+                </div> 
+            </div>
+            <div class="form-group col errormsg" id="emailError" > 
+                <span><i class="fa fa-exclamation-triangle"></i> Email already taken</span>
+            </div> 
+    
+            <div class="form-row"> 
+                <div class="form-group col-md-6">  
+                  <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                </div>  
+                <div class="form-group col-md-6"> 
+                  <input type="password" id="confirm_password" class="form-control" placeholder="Confirm Password" required>
+                </div> 
+            </div>
+            <div class="form-group col errormsg" id="passwordError" > 
+                <span><i class="fa fa-exclamation-triangle"></i> Password doesn't match the requirements.</span>
+            </div> 
+    
+            <div id="popover-password">
+                <p style="margin-bottom: 5px;">Password Strength: <span id="result"> </span></p>
+                <div class="progress" style="height: 5px;">
+                    <div id="password-strength" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                    </div>
+                </div>
+                <ul class="list-unstyled">
+                    <li class=""><span class="low-upper-case"><i class="fa fa-file-text" aria-hidden="true"></i></span>&nbsp; 1 lowercase &amp; 1 uppercase</li>
+                    <li class=""><span class="one-number"><i class="fa fa-file-text" aria-hidden="true"></i></span> &nbsp;1 number (0-9)</li>
+                    <li class=""><span class="one-special-char"><i class="fa fa-file-text" aria-hidden="true"></i></span> &nbsp;1 Special Character (!@#$%^&*).</li>
+                    <li class=""><span class="eight-character"><i class="fa fa-file-text" aria-hidden="true"></i></span>&nbsp; Atleast 8 Character</li>
+                </ul>
+            </div>
+    
+            <h6>We will send you an Email. Input the code to verify.</h6> 
+          </div>
+        
+        <div class="enterOtp">
+            <div class="done_text"> 
+                <a href="#" class="don_icon"><i class="ion-android-done"></i></a> 
+                <h6>Six digit OTP is sent to your email. <br>Please enter it here.</h6> 
+            </div>  
+            <div class="form-group col errormsg" id="otpError" > 
+                <span><i class="fa fa-exclamation-triangle"></i> Please enter correct otp.</span>
+            </div> 
+            <div class="code_group">
+                <input type="text" class="form-control inputs" id="otp1" placeholder="-" maxlength="1">
+                <input type="text" class="form-control inputs" id="otp2" placeholder="-" maxlength="1">
+                <input type="text" class="form-control inputs" id="otp3" placeholder="-" maxlength="1">
+                <input type="text" class="form-control inputs" id="otp4" placeholder="-" maxlength="1">
+                <input type="text" class="form-control inputs" id="otp5" placeholder="-" maxlength="1">
+                <input type="text" class="form-control inputs" id="otp6" placeholder="-" maxlength="1">
+            </div>  
+        </div>
+        
+        <button type="button" id="sendOtpBtn" class="action-button sendOtp">Send OTP</button>  
+      </fieldset>
+    </form>  
+  </section> 
+
+
+  <script>
+    $(document).ready(function() {
+        $("#username").keyup(function(e){
+            check_username($("#username").val());
+        });
+        function check_username(username){
+            $.ajax({
+                type: "GET",
+                url: "/vendor/check_username/?username="+username,
+                success: function(status){
+                    if (status == "False"){
+                        $("#usernameError").show();
+                        $("#usernameError").css("display","grid");
+                        $("#sendOtpBtn").hide();
+                    }else{
+                        $("#usernameError").hide();
+                        $("#sendOtpBtn").show();
+                    }
+                },
+            })
+        }
+
+        $(".sendOtp").click(function () {
+            if($(".detailsForm").css("display")!="none"){
+                if($('#result').addClass('text-success').text()=="Strong" && $("#password").val()===$("#confirm_password").val()){
+                    $("#passwordError").hide();
+                    $.ajax({
+                        type: "GET",
+                        url: "/vendor/send_email/?email="+$("#email").val(),
+                        success: function(status){
+                            if (status == "failed"){
+                                $("#emailError").show();
+                            }else{
+                                $("#emailError").hide();
+                                $(".detailsForm").hide();
+                                $(".enterOtp").show();
+                                $('#sendOtpBtn').removeClass('sendOtp');
+                                $('#sendOtpBtn').text('Verify');
+                            }
+                        },
+                    })
+                }else{
+                    $("#passwordError").show();
+                }
+            }else{
+                verify_OTP();
+            } 
+        });
+
+        $(".inputs").keyup(function () {
+            if (this.value.length == this.maxLength) {
+              $(this).next('.inputs').focus();
+            }
+        });
+    });
+
+    function verify_OTP() {
+        if($('#sendOtpBtn').css("display")!="none"){
+            var otp = parseInt($("#otp1").val() + $("#otp2").val() + $("#otp3").val() + $("#otp4").val() + $("#otp5").val() + $("#otp6").val())
+            $.ajax({
+                type: "GET",
+                url: "/vendor/verify_email/?email="+$("#email").val()+"&otp="+otp.toString(),
+                success: function(status){
+                    if (status == "failed"){
+                        $("#otpError").show();
+                    }else{
+                        $("#otpError").hide();
+                        $(".enterOtp").hide();
+                        $('#sendOtpBtn').removeClass('verifyOtp');
+                        $('#sendOtpBtn').addClass('next');
+                        postuser();
+                    }
+                },
+            })
+        }
+    }
+    
+    function postuser(){
+        var form = $("#msform")
+        $.ajax({
+            url: form.attr("action"),
+            method: form.attr("method"),
+            data: form.serialize(),
+            success: function(status){
+                if (status == "failed"){
+                    $(".enterOtp").show();
+                    $("#otpError").show();
+                    $("#otpError").html("Some error in creating account, Please try later.");
+                }else{
+                    window.location.href = '/vendor/';
+                }
+            },
+        });
+    }
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+        var password = $('#password').val();
+        if (checkStrength(password) == false) {
+            $('#sign-up').attr('disabled', true);
+        }
+    });
+    
+        function checkStrength(password) {
+            var strength = 0;
+    
+    
+            //If password contains both lower and uppercase characters, increase strength value.
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
+                strength += 1;
+                $('.low-upper-case').addClass('text-success');
+                $('.low-upper-case i').removeClass('fa-file-text').addClass('fa-check');
+                $('#popover-password-top').addClass('hide');
+    
+    
+            } else {
+                $('.low-upper-case').removeClass('text-success');
+                $('.low-upper-case i').addClass('fa-file-text').removeClass('fa-check');
+                $('#popover-password-top').removeClass('hide');
+            }
+    
+            //If it has numbers and characters, increase strength value.
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) {
+                strength += 1;
+                $('.one-number').addClass('text-success');
+                $('.one-number i').removeClass('fa-file-text').addClass('fa-check');
+                $('#popover-password-top').addClass('hide');
+    
+            } else {
+                $('.one-number').removeClass('text-success');
+                $('.one-number i').addClass('fa-file-text').removeClass('fa-check');
+                $('#popover-password-top').removeClass('hide');
+            }
+    
+            //If it has one special character, increase strength value.
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) {
+                strength += 1;
+                $('.one-special-char').addClass('text-success');
+                $('.one-special-char i').removeClass('fa-file-text').addClass('fa-check');
+                $('#popover-password-top').addClass('hide');
+    
+            } else {
+                $('.one-special-char').removeClass('text-success');
+                $('.one-special-char i').addClass('fa-file-text').removeClass('fa-check');
+                $('#popover-password-top').removeClass('hide');
+            }
+    
+            if (password.length > 7) {
+                strength += 1;
+                $('.eight-character').addClass('text-success');
+                $('.eight-character i').removeClass('fa-file-text').addClass('fa-check');
+                $('#popover-password-top').addClass('hide');
+    
+            } else {
+                $('.eight-character').removeClass('text-success');
+                $('.eight-character i').addClass('fa-file-text').removeClass('fa-check');
+                $('#popover-password-top').removeClass('hide');
+            }
+    
+            // If value is less than 2
+    
+            if (strength < 2) {
+                $('#result').removeClass()
+                $('#password-strength').addClass('progress-bar-danger');
+    
+                $('#result').addClass('text-danger').text('Very Week');
+                $('#password-strength').css('width', '10%');
+            } else if (strength == 2) {
+                $('#result').addClass('good');
+                $('#password-strength').removeClass('progress-bar-danger');
+                $('#password-strength').addClass('progress-bar-warning');
+                $('#result').addClass('text-warning').text('Week')
+                $('#password-strength').css('width', '60%');
+                return 'Week'
+            } else if (strength == 4) {
+                $('#result').removeClass()
+                $('#result').addClass('strong');
+                $('#password-strength').removeClass('progress-bar-warning');
+                $('#password-strength').addClass('progress-bar-success');
+                $('#result').addClass('text-success').text('Strong');
+                $('#password-strength').css('width', '100%');
+    
+                return 'Strong'
+            }
+    
+        }
+    });
+  </script>
+
+{% endblock %}

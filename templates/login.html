@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block main-content %}
+{{GA|safe}}
+
+{% if message %}
+<div class="alert alert-danger text-center" role="alert">
+    {{message}}
+</div>
+{% endif %}
+
+{% if messages %}
+{% for m in messages %}
+<div class="alert alert-success text-center" role="alert">
+    {{m}}
+</div>
+{% endfor %}
+{% endif %}
+
+
+<div class="formcon">
+
+    <h3 class="text-center p-3 signincolor">Sign In</h3>
+
+    <form method="POST" class="mb-4 pb-3 signin-form" name="loginform" id="login" name="login">
+        {% csrf_token %}
+        <div class="col-10 mx-auto">
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input class="form-control" autofocus="" id="id_username" maxlength="254" 
+                    name="username" type="text" value="{{form.username.value|default_if_none:''}}"required />
+            </div>
+        </div>
+        <div class="col-10 mx-auto">
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input class="form-control" id="id_password" name="password" type="password" required />
+            </div>
+        </div>
+
+        <div class="col-10 mx-auto text-center">
+            <div class="form-group">
+                <input type="checkbox" name="remember" id="remember" class="custom" checked="true" />
+                <label for="remember">Remember me ?</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 text-center">
+                <button class="btn btn-primary btn-md" type="submit">Login</button>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <p><a href="/vendor/forgot/">Forgot username or password?</a></p>
+            <p><a href="/vendor/signup/">Create an account</a></p>
+            For assistance, please send an email to <a href="mailto:#">support@hopon.co.in</a>.
+        </div>
+
+    </form>
+    
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        var remember = $.cookie('remember');
+        if (remember == 'true') 
+        {
+            var email = $.cookie('id_username');
+            var password = $.cookie('id_password');
+            // autofill the fields
+            $('#id_username').val(email);
+            $('#id_password').val(password);
+        }
+
+
+    $("#login").submit(function() {
+        if ($('#remember').is(':checked')) {
+            var email = $('#id_username').val();
+            var password = $('#id_password').val();
+
+            // set cookies to expire in 14 days
+            $.cookie('id_username', email, { expires: 14 });
+            $.cookie('id_password', password, { expires: 14 });
+            $.cookie('remember', true, { expires: 14 });                
+        }
+        else
+        {
+            // reset cookies
+            $.cookie('id_username', null);
+            $.cookie('id_password', null);
+            $.cookie('remember', null);
+        }
+  });
+});
+</script>
+{% endblock %}
